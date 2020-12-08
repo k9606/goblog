@@ -2,13 +2,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/gorilla/mux"
 	"net/http"
 	"net/url"
 	"strings"
 	"text/template"
 	"unicode/utf8"
-
-	"github.com/gorilla/mux"
 )
 
 var router = mux.NewRouter()
