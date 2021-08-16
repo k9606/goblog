@@ -9,6 +9,7 @@ import (
 // Article 文章模型
 type Article struct {
 	models.BaseModel
+
 	Title string
 	Body  string
 }
