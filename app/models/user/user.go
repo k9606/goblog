@@ -14,7 +14,7 @@ type User struct {
 	Email    string `gorm:"column:email;type:varchar(255);default:NULL;unique;" valid:"email"`
 	Password string `gorm:"column:password;type:varchar(255)" valid:"password"`
 	// gorm:"-" —— 设置 GORM 在读写时略过此字段
-	PasswordConfirm string ` gorm:"-" valid:"password_confirm"`
+	PasswordConfirm string `gorm:"-" valid:"password_confirm"`
 }
 
 // ComparePassword 对比密码是否匹配
