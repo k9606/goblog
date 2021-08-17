@@ -4,7 +4,9 @@ import (
 	"goblog/app/models"
 	"goblog/app/models/user"
 	"goblog/pkg/model"
+	"goblog/pkg/pagination"
 	"goblog/pkg/route"
+	"net/http"
 	"strconv"
 )
 
@@ -17,6 +19,8 @@ type Article struct {
 
 	UserID uint64 `gorm:"not null;index"`
 	User   user.User
+
+	CategoryID uint64 `gorm:"not null;default:4;index"`
 }
 
 // Link 方法用来生成文章链接
@@ -36,4 +40,21 @@ func GetByUserID(uid string) ([]Article, error) {
 		return articles, err
 	}
 	return articles, nil
+}
+
+// GetByCategoryID 获取分类相关的文章
+func GetByCategoryID(cid string, r *http.Request, perPage int) ([]Article, pagination.ViewData, error) {
+
+	// 1. 初始化分页实例
+	db := model.DB.Model(Article{}).Where("category_id = ?", cid).Order("created_at desc")
+	_pager := pagination.New(r, db, route.Name2URL("categories.show", "id", cid), perPage)
+
+	// 2. 获取视图数据
+	viewData := _pager.Paging()
+
+	// 3. 获取数据
+	var articles []Article
+	_pager.Results(&articles)
+
+	return articles, viewData, nil
 }
